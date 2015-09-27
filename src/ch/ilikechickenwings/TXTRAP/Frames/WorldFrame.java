@@ -130,7 +130,7 @@ public class WorldFrame implements Processable{
 				
 				mainFrame.log("You have "+Float.toString(player.getHealth())+"% life left");
 				
-				mainFrame.log("And you are in "+ player.getCity().getCityName()+" at the moment");
+				mainFrame.log("And you are in the great "+ player.getCity().getCityName()+" at the moment");
 					break;
 			case "inventory":
 				mainFrame.log("In your Inventory is: ");
