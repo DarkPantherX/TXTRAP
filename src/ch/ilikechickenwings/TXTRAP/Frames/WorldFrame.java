@@ -144,7 +144,7 @@ public class WorldFrame implements Processable{
 						Console.log("->"+Integer.toString(it.getQuantity())+"x "+it.getName(), Console.standartListOutput);
 						}
 					}else{
-						Console.log("-->nothing<-- (poor fuck...)", Console.standartListOutput);
+						Console.log("-->nothing<-- (poor as fuck...)", Console.standartListOutput);
 					}
 				
 					break;
