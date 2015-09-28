@@ -10,8 +10,9 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import ch.ilikechickenwings.TXTRAP.Console;
 import ch.ilikechickenwings.TXTRAP.Frames.NewWorldFrame;
-import ch.ilikechickenwings.TXTRAP.Interface.TTextArea;
+import ch.ilikechickenwings.TXTRAP.Interface.TTextPane;
 
 public class MainFrame implements ActionListener, Processable {
 
@@ -36,13 +37,13 @@ public class MainFrame implements ActionListener, Processable {
 	/** The World of the game*/
 	private Processable processable;
 	/**This is the upper TextArea, it acts like a console*/
-	private TTextArea tArea;
+	private TTextPane tArea;
 	
 	
 	/**
 	 * Main Class, with this class starts the frame and engine
 	 */
-	MainFrame() {
+	public MainFrame() {
 
 		frame = new JFrame(gameName);
 		frame.setSize(600, 400);
@@ -52,11 +53,9 @@ public class MainFrame implements ActionListener, Processable {
 		but = new JButton("Enter");
 		but.addActionListener(this);
 
-		tArea = new TTextArea("Let's go");
+		tArea = new TTextPane();
 		tArea.setEditable(false);
-
-		tArea.setLineWrap(true);
-		tArea.setWrapStyleWord(true);
+		new Console(tArea);
 
 		JScrollPane sp = new JScrollPane(tArea,
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
@@ -91,30 +90,14 @@ public class MainFrame implements ActionListener, Processable {
 		
 		processable=this;
 		
-		log("Welcome in "+gameName+" a hard place for all kinds of folks!");
-		log("Do you want to 'load' into a game or do you want a new game with 'new Game'? ");
+		Console.logSingleLine("Welcome in "+gameName+" a hard place for all kinds of folks!", Console.startOutput);
+		Console.log("Do you want to 'load' into a game or do you want a new game with 'new game'? ",Console.startOutput);
 		
 	}
 	
 	
 	
-	public void log(String s){
-		tArea.appendLine(s);
-		
-		
-	}
-	
-	public void logSingleLine(String s){
-		tArea.append(s);
-		
-		
-	}
-	
-	public void clearlog(){
-		tArea.setText("");
-		
-		
-	}
+
 	
 	
 	@Override
@@ -129,7 +112,7 @@ public class MainFrame implements ActionListener, Processable {
 			case "exit":
 				System.exit(0);
 					break;
-			default: tArea.appendLine("Command not found");
+			default: Console.log("Command not found", Console.errorOutput);
 					break;
 
 		}
@@ -141,10 +124,6 @@ public class MainFrame implements ActionListener, Processable {
 	
 	
 
-	public static void main(String[] args) {
-		new MainFrame();
-
-	}
 
 	@Override
 	/** 
@@ -157,7 +136,7 @@ public class MainFrame implements ActionListener, Processable {
 
 			if (!tField.getText().trim().equals("")) {
 
-				tArea.append("\n" + tField.getText());
+				Console.log(tField.getText(),Console.standartCommand);
 				tArea.setCaretPosition(tArea.getDocument().getLength());
 				String s[]=tField.getText().split(" ");
 				
@@ -192,7 +171,7 @@ public class MainFrame implements ActionListener, Processable {
 	/**
 	 * @return the tArea
 	 */
-	public TTextArea gettArea() {
+	public TTextPane gettArea() {
 		return tArea;
 	}
 
@@ -202,7 +181,7 @@ public class MainFrame implements ActionListener, Processable {
 	/**
 	 * @param tArea the tArea to set
 	 */
-	public void settArea(TTextArea tArea) {
+	public void settArea(TTextPane tArea) {
 		this.tArea = tArea;
 	}
 
