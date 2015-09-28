@@ -1,5 +1,6 @@
 package ch.ilikechickenwings.TXTRAP.Frames;
 
+import ch.ilikechickenwings.TXTRAP.Console;
 import ch.ilikechickenwings.TXTRAP.Frames.MainFrame;
 import ch.ilikechickenwings.TXTRAP.Frames.Processable;
 import ch.ilikechickenwings.TXTRAP.Frames.WorldFrame;
@@ -15,8 +16,9 @@ public class NewWorldFrame implements Processable {
 	
 	public NewWorldFrame(MainFrame frame){
 		this.frame=frame;
-		frame.log("You will create a new World, to load an old world write 'return'!");
-		frame.log("Enter the name of your save (You have to remember this one!)");
+		Console.clearlog();
+		Console.logSingleLine("You will create a new World, to load an old world write 'return'!",Console.startOutputComment);
+		Console.log("Enter the name of your save (You have to remember this one!)",Console.startOutput);
 		
 		
 		
@@ -27,8 +29,8 @@ public class NewWorldFrame implements Processable {
 	public void processInput(String[] s) {
 		if(s[0].toLowerCase().equals("return")){
 			frame.setProcessable(frame);
-			frame.clearlog();
-			frame.log("'new game' for a new game or load for an old game");
+			Console.clearlog();
+			Console.logSingleLine("'new game' for a new game or load for an old game",Console.startOutput);
 
 		}else{
 		
@@ -42,7 +44,8 @@ public class NewWorldFrame implements Processable {
 					}
 					saveName.append(s[i]);
 				}
-				frame.log("Enter your name, warrior! ->But keep in mind, you can't use commands as your name!");
+				Console.log("");
+				Console.log("Enter your name, warrior! ->But keep in mind, you can't use commands as your name!", Console.startOutput);
 		}else if(name==null){
 			name = new StringBuilder();
 			for(int i=0;i<s.length;i++){
@@ -51,7 +54,8 @@ public class NewWorldFrame implements Processable {
 				}
 				name.append(s[i]);
 			}
-			frame.log("Enter your class name, warrior");
+			Console.log("");
+			Console.log("Enter your class name, warrior",Console.startOutput);
 		}else if(gameClass==null){
 			gameClass=new StringBuilder();
 			
@@ -61,8 +65,8 @@ public class NewWorldFrame implements Processable {
 				}
 				gameClass.append(s[i]);
 			}
-			
-			frame.log("Welcome to the new World, " + name.toString() + ", be prepard for a world full of adventures");
+			Console.clearlog();
+			Console.logSingleLine("Welcome to the new World, " + name.toString() + ", be prepard for a world full of adventures",Console.startOutput);
 			
 			WorldFrame f= new WorldFrame(frame);
 			f.setPlayer(new Player(name.toString(),gameClass.toString()));

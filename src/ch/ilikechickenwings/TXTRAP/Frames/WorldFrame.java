@@ -3,6 +3,7 @@ package ch.ilikechickenwings.TXTRAP.Frames;
 import java.util.ArrayList;
 
 import ch.ilikechickenwings.TXTRAP.City;
+import ch.ilikechickenwings.TXTRAP.Console;
 import ch.ilikechickenwings.TXTRAP.Frames.Processable;
 import ch.ilikechickenwings.TXTRAP.Entity.Item;
 import ch.ilikechickenwings.TXTRAP.Entity.Player;
@@ -27,7 +28,7 @@ public class WorldFrame implements Processable{
 		setMainFrame(mF);
 		createWorld();
 		
-		mainFrame.log("Type help for available commands");
+		Console.log("Type help for available commands", Console.standartOutput);
 	}
 	
 	
@@ -41,8 +42,8 @@ public class WorldFrame implements Processable{
 		this(mF);
 		setPlayer(player);
 		
-		mainFrame.log(player.getName()+" wakes up in " + player.getCity().getCityName());
-		mainFrame.log("Type help for available commands");
+		Console.log(player.getName()+" wakes up in " + player.getCity().getCityName(), Console.standartOutput);
+		Console.log("Type help for available commands" , Console.standartOutput);
 		
 	}
 	
@@ -70,10 +71,10 @@ public class WorldFrame implements Processable{
 			case "attack": 
 					break;
 			case "help":
-				mainFrame.log("Available commands: map ->Showes Cities "
+				Console.log("Available commands: map ->Showes Cities "
 						+ "\n goto <cityname> ->You go to the chosen city"
 						+ "\n status ->Tells you how many lifes you have left"
-						+ "\n inventory -> Shoes you your inventory");
+						+ "\n inventory -> Shoes you your inventory", Console.standartOutput);
 					break;
 			case "goto":
 				if(s.length>1){
@@ -88,7 +89,7 @@ public class WorldFrame implements Processable{
 						--i;
 						if(!notFound){
 							player.setCity(c);
-							mainFrame.log("You went to: " + c.getCityName());
+							Console.log("You went to: " + c.getCityName(), Console.standartEvent);
 						}else if(i<0){
 							break;
 						}
@@ -97,16 +98,16 @@ public class WorldFrame implements Processable{
 				}
 				if(notFound){
 					
-					mainFrame.log("Couldn't find you city");
+					Console.log("Couldn't find you city", Console.errorOutput);
 				}
 				}
 					break;
 			case "map":
-				mainFrame.log("Cities here:");
+				Console.log("Cities here:", Console.standartOutput);
 				City city;
 				for(int in=0; in<cities.size();in++){
 					city= (City)cities.get(in);
-					mainFrame.logSingleLine(" "+city.getCityName()+",");
+					Console.logSingleLine(" "+city.getCityName()+",",Console.standartListOutput);
 				}
 					break;
 			case "mine":
@@ -116,38 +117,38 @@ public class WorldFrame implements Processable{
 			case "talk":
 					break;
 			case "status":
-				mainFrame.log("Health: ");
+				Console.log("Your name is " +player.getName()+" the "+ player.getGameClass(),Console.standartOutput);
+				Console.log("Health: ", Console.standartOutput);
 				int h= (int)(player.getHealth()/player.getMaxHealth()*10);
 				for(int i=0;i<10;i++){
 					if(h>0){
-						mainFrame.logSingleLine("O");
+						Console.logSingleLine("O");
 						h--;
 					}else{
-						mainFrame.logSingleLine("X");
+						Console.logSingleLine("X");
 					}
 					
 					
 				}
 				
+				Console.log("You have "+Float.toString(player.getHealth())+"% life left", Console.standartOutput);
 				
-				mainFrame.log("You have "+Float.toString(player.getHealth())+"% life left");
-				
-				mainFrame.log("And you are in the great "+ player.getCity().getCityName()+" at the moment");
+				Console.log("And you are in the great "+ player.getCity().getCityName()+" at the moment", Console.standartOutput);
 					break;
 			case "inventory":
-				mainFrame.log("In your Inventory is: ");
+				Console.log("In your Inventory is: ", Console.standartOutput);
 					Item it;
 					if(player.getInventory().size()>0){
 						for(int i2=0;i2<player.getInventory().size();i2++){
 						it = (Item) player.getInventory().get(i2);
-						mainFrame.log("->"+Integer.toString(it.getQuantity())+"x "+it.getName());
+						Console.log("->"+Integer.toString(it.getQuantity())+"x "+it.getName(), Console.standartListOutput);
 						}
 					}else{
-						mainFrame.log("-->nothing<-- (poor fuck...)");
+						Console.log("-->nothing<-- (poor fuck...)", Console.standartListOutput);
 					}
 				
 					break;
-			default: mainFrame.gettArea().appendLine("Command not found");
+			default: Console.log("Command not found",Console.errorOutput);
 					break;
 
 		}
