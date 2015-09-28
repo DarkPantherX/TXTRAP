@@ -51,6 +51,8 @@ public class WorldFrame implements Processable{
 	private void createWorld() {
 		City city = new City("Tamariel");
 		cities.add(city);
+		city = new City("Bananistan");
+		cities.add(city);
 		city= new City("Eschenbach");
 		cities.add(city);
 		city=new City("Schmerikon");
