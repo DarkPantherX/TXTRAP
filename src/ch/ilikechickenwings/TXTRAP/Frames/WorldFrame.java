@@ -131,9 +131,9 @@ public class WorldFrame implements Processable{
 					
 				}
 				
-				Console.log("You have "+Float.toString(player.getHealth())+"% life left", Console.standartOutput);
+				Console.logSingleLine(" --> "+Float.toString(player.getHealth())+"% life left", Console.standartOutput);
 				
-				Console.log("And you are in the great "+ player.getCity().getCityName()+" at the moment", Console.standartOutput);
+				Console.log("You are in the great "+ player.getCity().getCityName()+" at the moment", Console.standartOutput);
 					break;
 			case "inventory":
 				Console.log("In your Inventory is: ", Console.standartOutput);
