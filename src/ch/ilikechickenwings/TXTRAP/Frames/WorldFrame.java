@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import ch.ilikechickenwings.TXTRAP.City;
 import ch.ilikechickenwings.TXTRAP.Console;
 import ch.ilikechickenwings.TXTRAP.Frames.Processable;
+import ch.ilikechickenwings.TXTRAP.Places.Market;
+import ch.ilikechickenwings.TXTRAP.Places.Place;
+import ch.ilikechickenwings.TXTRAP.Places.Whorehouse;
+import ch.ilikechickenwings.TXTRAP.Entity.Whore;
 import ch.ilikechickenwings.TXTRAP.Entity.Item;
 import ch.ilikechickenwings.TXTRAP.Entity.Player;
 
@@ -69,6 +73,9 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 	
 	private void createWorld() {
 		City city = new City("Tamariel");
+		
+		Market m = new Market(this);
+		city.getPlaces().add(m);
 		cities.add(city);
 		city = new City("Bananistan");
 		cities.add(city);
@@ -78,6 +85,12 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 		cities.add(city);
 		city=new City("Ass");
 		cities.add(city);
+		
+		
+		Whorehouse h= new Whorehouse(this);
+		Whore h1= new Whore(100, "Anna", city, "", h);
+		h.getHumans().add(h1);
+		city.getPlaces().add(h);
 		
 	}
 
@@ -91,7 +104,7 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 				
 					break;
 			case "help":
-				Console.log("Available commands: map ->Showes Cities "
+				Console.log("Available commands: \n map ->Showes Cities "
 						+ "\n goto <cityname> ->You go to the chosen city"
 						+ "\n status ->Tells you how many lifes you have left"
 						+ "\n inventory -> Shoes you your inventory", Console.standartOutput);
@@ -103,12 +116,14 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 				City c;
 				while(notFound){
 					c=(City) cities.get(i);
-					if(c.getCityName().toLowerCase().equals(s[1])){
+					if(c.getCityName().toLowerCase().equals(s[1].toLowerCase())){
 						notFound=false;
 						}
 						--i;
 						if(!notFound){
 							player.setCity(c);
+							Place p=c.getPlaces().get(0);
+							player.setPlace(p);
 							Console.log("You went to: " + c.getCityName(), Console.standartEvent);
 						}else if(i<0){
 							break;
@@ -134,16 +149,15 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 					break;
 			case "sleep":
 					break;
-			case "talk":
-					break;
+			
 			case "status":
 				Console.log("Your name is " +player.getName()+" the "+ player.getGameClass(),Console.standartOutput);
 				Console.log("Health: ", Console.standartOutput);
-				int h= (int)(player.getHealth()/player.getMaxHealth()*10);
-				for(int i=0;i<10;i++){
-					if(h>0){
+				int h1= (int)(player.getHealth()/player.getMaxHealth()*10);
+				for(int i1=0;i1<10;i1++){
+					if(h1>0){
 						Console.logSingleLine("O");
-						h--;
+						h1--;
 					}else{
 						Console.logSingleLine("X");
 					}
@@ -161,6 +175,10 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 					if(player.getInventory().size()>0){
 						for(int i2=0;i2<player.getInventory().size();i2++){
 						it = (Item) player.getInventory().get(i2);
+						if(it.getQuantity()==0){
+							player.getInventory().remove(it);
+				
+						}
 						Console.log("->"+Integer.toString(it.getQuantity())+"x "+it.getName(), Console.standartListOutput);
 						}
 					}else{
@@ -206,6 +224,10 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 			        ex.printStackTrace();
 			    }
 			    break;
+			    
+			case "interact":
+				player.getPlace().interact(player);
+				break;
 			
 			default: Console.log("Command not found",Console.errorOutput);
 					break;

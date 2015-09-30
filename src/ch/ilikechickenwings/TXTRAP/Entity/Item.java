@@ -12,9 +12,9 @@ public class Item implements Serializable{
 	private int quantity;
 	
 	
-	public Item(){
-		
-		
+	public Item(String name2, int quantity){
+		setName(name2);
+		setQuantity(quantity);
 		
 	}
 	

@@ -91,7 +91,7 @@ public class NewWorldFrame implements Processable {
 			Console.logSingleLine("Welcome to the new World, " + name.toString() + ", be prepard for a world full of adventures",Console.startOutput);
 			
 			WorldFrame f= new WorldFrame(frame,saveName.toString());
-			f.setPlayer(new Player(name.toString(),gameClass.toString(),f.getCities().get(0)));
+			f.setPlayer(new Player(name.toString(),gameClass.toString(),f.getCities().get(0),f.getCities().get(0).getPlaces().get(0)));
 			frame.setProcessable(f);
 			
 		}

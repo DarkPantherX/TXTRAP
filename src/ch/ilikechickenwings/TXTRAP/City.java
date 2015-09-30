@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import ch.ilikechickenwings.TXTRAP.Entity.Entity;
 import ch.ilikechickenwings.TXTRAP.Frames.WorldFrame;
+import ch.ilikechickenwings.TXTRAP.Places.Place;
 
 public class City implements Serializable{
 	/**
@@ -15,7 +16,9 @@ public class City implements Serializable{
 	/**
 	 * ArrayList with enitites in the city
 	 */
-	public ArrayList<Entity> entities = new ArrayList<Entity>();
+	private ArrayList<Entity> entities = new ArrayList<Entity>();
+	private ArrayList<Place> places = new ArrayList<Place>();
+	
 	
 	private WorldFrame world;
 	
@@ -29,6 +32,34 @@ public class City implements Serializable{
 	 */
 	public City(String cityname) {
 		setCityName(cityname);
+	}
+
+	/**
+	 * @return the entities
+	 */
+	public ArrayList<Entity> getEntities() {
+		return entities;
+	}
+
+	/**
+	 * @param entities the entities to set
+	 */
+	public void setEntities(ArrayList<Entity> entities) {
+		this.entities = entities;
+	}
+
+	/**
+	 * @return the places
+	 */
+	public ArrayList<Place> getPlaces() {
+		return places;
+	}
+
+	/**
+	 * @param places the places to set
+	 */
+	public void setPlaces(ArrayList<Place> places) {
+		this.places = places;
 	}
 
 	/**
