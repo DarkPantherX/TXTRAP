@@ -94,8 +94,10 @@ public class MainFrame implements ActionListener, Processable , Serializable{
 		gbc.weighty = 0.1;
 		frame.add(but, gbc);
 
-		frame.setVisible(true);
 		
+		
+		frame.setVisible(true);
+		tField.requestFocus();
 		processable=this;
 		
 		Console.logSingleLine("Welcome in "+gameName+" a hard place for all kinds of folks!", Console.startOutput);
@@ -129,6 +131,7 @@ public class MainFrame implements ActionListener, Processable , Serializable{
 			        try {
 			            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(s1));
 			            WorldFrame wF = (WorldFrame)ois.readObject();
+			            wF.setMainFrame(this);
 			            processable = wF;
 			            ois.close();
 			            wF.loadedGame();
