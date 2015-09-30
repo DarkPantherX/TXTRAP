@@ -44,7 +44,7 @@ public class NewWorldFrame implements Processable {
 				saveName=new StringBuilder();
 				
 					saveName.append(s[0]);
-					File file0 = new File((new StringBuilder()).append(System.getProperty("user.home")).append("/.TXTRAP/".concat(saveName.append(".dat").toString())).toString());
+					File file0 = new File((new StringBuilder()).append(System.getProperty("user.home")).append("/.TXTRAP/".concat(saveName.toString().concat(".dat"))).toString());
 			        if(file0.exists()){
 			        	Console.log("World already exists, want to overwrite it? (yes/no)",Console.errorOutput);
 			        	exists=true;
