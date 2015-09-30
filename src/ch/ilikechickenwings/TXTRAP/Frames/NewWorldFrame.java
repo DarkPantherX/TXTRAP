@@ -1,5 +1,7 @@
 package ch.ilikechickenwings.TXTRAP.Frames;
 
+import java.io.File;
+
 import ch.ilikechickenwings.TXTRAP.Console;
 import ch.ilikechickenwings.TXTRAP.Frames.MainFrame;
 import ch.ilikechickenwings.TXTRAP.Frames.Processable;
@@ -14,11 +16,13 @@ public class NewWorldFrame implements Processable {
 	private StringBuilder gameClass;
 	private StringBuilder saveName;
 	
+	private static boolean exists=false;
+	
 	public NewWorldFrame(MainFrame frame){
 		this.frame=frame;
 		Console.clearlog();
 		Console.logSingleLine("You will create a new World, to load an old world write 'return'!",Console.startOutputComment);
-		Console.log("Enter the name of your save (You have to remember this one!)",Console.startOutput);
+		Console.log("Enter the name of your save (Only one word and you have to remember this one!)",Console.startOutput);
 		
 		
 		
@@ -38,14 +42,32 @@ public class NewWorldFrame implements Processable {
 			if(saveName==null){
 				
 				saveName=new StringBuilder();
-				for(int i=0;i<s.length;i++){
-					if(i!=0){
-						saveName.append(" ");
-					}
-					saveName.append(s[i]);
-				}
+				
+					saveName.append(s[0]);
+					File file0 = new File((new StringBuilder()).append(System.getProperty("user.home")).append("/.TXTRAP/".concat(saveName.append(".dat").toString())).toString());
+			        if(file0.exists()){
+			        	Console.log("World already exists, want to overwrite it? (yes/no)",Console.errorOutput);
+			        	exists=true;
+			        }else{
+				
 				Console.log("");
 				Console.log("Enter your name, warrior! ->But keep in mind, you can't use commands as your name!", Console.startOutput);
+				
+			        }
+		}else if(exists){
+			if(s[0].toLowerCase().equals("yes")||s[0].toLowerCase().equals("y")){
+				Console.log("");
+				Console.log("Enter your name, warrior! ->But keep in mind, you can't use commands as your name!", Console.startOutput);	
+				exists=false;
+			}else if(s[0].toLowerCase().equals("no")||s[0].toLowerCase().equals("n")){
+				saveName=null;
+				exists=false;
+				Console.log("Enter a new name for your world",Console.startOutput);
+				
+			}
+			
+			
+			
 		}else if(name==null){
 			name = new StringBuilder();
 			for(int i=0;i<s.length;i++){
@@ -68,8 +90,8 @@ public class NewWorldFrame implements Processable {
 			Console.clearlog();
 			Console.logSingleLine("Welcome to the new World, " + name.toString() + ", be prepard for a world full of adventures",Console.startOutput);
 			
-			WorldFrame f= new WorldFrame(frame);
-			f.setPlayer(new Player(name.toString(),gameClass.toString()));
+			WorldFrame f= new WorldFrame(frame,saveName.toString());
+			f.setPlayer(new Player(name.toString(),gameClass.toString(),f.getCities().get(0)));
 			frame.setProcessable(f);
 			
 		}

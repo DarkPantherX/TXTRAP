@@ -4,6 +4,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,11 +18,15 @@ import ch.ilikechickenwings.TXTRAP.Console;
 import ch.ilikechickenwings.TXTRAP.Frames.NewWorldFrame;
 import ch.ilikechickenwings.TXTRAP.Interface.TTextPane;
 
-public class MainFrame implements ActionListener, Processable {
+public class MainFrame implements ActionListener, Processable , Serializable{
 
 	
 	//public variables: Don't need getters and setters to access
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/** This Variable contains the Main Frame for our game*/
 	public JFrame frame;
 	/**This is the lower text field, it is for our input and listens to the "Enter"-key 
@@ -112,6 +120,28 @@ public class MainFrame implements ActionListener, Processable {
 			case "exit":
 				System.exit(0);
 					break;
+			case "load":
+				String s1=(new StringBuilder()).append(System.getProperty("user.home")).append("/.TXTRAP/".concat(s[1].concat(".dat"))).toString();
+				File file0 = new File(s1);
+		        if(file0.exists()){
+				
+				
+			        try {
+			            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(s1));
+			            WorldFrame wF = (WorldFrame)ois.readObject();
+			            processable = wF;
+			            ois.close();
+			            wF.loadedGame();
+			            new Thread(wF).start();
+			        } catch(Exception ex) {
+			            ex.printStackTrace();
+			        }
+		        }else{
+		        	
+		        	Console.log("No world found with this name",Console.errorOutput);
+		        	
+		        }
+		        break;
 			default: Console.log("Command not found", Console.errorOutput);
 					break;
 

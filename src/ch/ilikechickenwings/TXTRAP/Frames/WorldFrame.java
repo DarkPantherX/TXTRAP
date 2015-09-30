@@ -1,5 +1,9 @@
 package ch.ilikechickenwings.TXTRAP.Frames;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import ch.ilikechickenwings.TXTRAP.City;
@@ -8,26 +12,40 @@ import ch.ilikechickenwings.TXTRAP.Frames.Processable;
 import ch.ilikechickenwings.TXTRAP.Entity.Item;
 import ch.ilikechickenwings.TXTRAP.Entity.Player;
 
-public class WorldFrame implements Processable{
+public class WorldFrame implements Processable, Runnable, Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	
 	/**
 	 * ArrayList with city in the worlds
 	 */
-	public static ArrayList<City> cities = new ArrayList<City>();
+	private ArrayList<City> cities = new ArrayList<City>();
+	private boolean gameRunning=true;
+	private String name;
+	
 	
 	private Player player;
 	private MainFrame mainFrame;
 	
+	/**
+	 * Time for the game
+	 */
+	private long time=0;
 	
 
 	
 	/**
 	 * Creates new World only with MainFrame
 	 */
-	public WorldFrame(MainFrame mF){
+	public WorldFrame(MainFrame mF, String name1){
 		setMainFrame(mF);
 		createWorld();
-		
+		new Thread(this).start();
+		name=name1;
 		Console.log("Type help for available commands", Console.standartOutput);
 	}
 	
@@ -38,8 +56,8 @@ public class WorldFrame implements Processable{
 	/** 
 	 * Creates new World with player and MainFrame
 	 */
-	public WorldFrame(Player player, MainFrame mF){
-		this(mF);
+	public WorldFrame(Player player, MainFrame mF, String name1){
+		this(mF,name1);
 		setPlayer(player);
 		
 		Console.log(player.getName()+" wakes up in " + player.getCity().getCityName(), Console.standartOutput);
@@ -68,7 +86,9 @@ public class WorldFrame implements Processable{
 	public void processInput(String[] s) {
 		
 		switch (s[0].toLowerCase()){
-			case "attack": 
+			case "attack":
+					Console.log("You attacked: " + s[1]);
+				
 					break;
 			case "help":
 				Console.log("Available commands: map ->Showes Cities "
@@ -148,6 +168,45 @@ public class WorldFrame implements Processable{
 					}
 				
 					break;
+			case "time":
+					int minTime= (int) time%60;
+					int hourTime=(int) (time/60)%24;
+					int dayTime=(int)((time/60)/24)%30;
+					int monthTime=(int)(((time/60)/24)/30)%12;
+					long yearTime=(long)(((time/60)/24)/30)/12;
+					
+					Console.log("It is: ",Console.standartOutput);
+					if(hourTime/10==0){Console.logSingleLine(Integer.toString(0),Console.standartListOutput);}
+					Console.logSingleLine(hourTime+":",Console.standartListOutput);
+					if(minTime/10==0){Console.logSingleLine(Integer.toString(0),Console.standartListOutput);}
+					Console.logSingleLine(minTime+ " - ",Console.standartListOutput);
+					Console.logSingleLine("On the ",Console.standartOutput);Console.logSingleLine(Integer.toString(dayTime+1),Console.standartListOutput);Console.logSingleLine("th day ",Console.standartOutput);
+					Console.logSingleLine("on the ",Console.standartOutput);Console.logSingleLine(Integer.toString(monthTime+1),Console.standartListOutput);Console.logSingleLine("th month ",Console.standartOutput);
+					Console.logSingleLine("in the ",Console.standartOutput);Console.logSingleLine(Integer.toString((int)yearTime+1),Console.standartListOutput);Console.logSingleLine("th year ",Console.standartOutput);
+					
+					
+					break;
+					
+			case "save":
+
+				File file0 = new File((new StringBuilder()).append(System.getProperty("user.home")).append("/.TXTRAP/".concat(name.concat(".dat"))).toString());
+		        if(!file0.exists())
+		        {
+		            File file1 = new File((new StringBuilder()).append(System.getProperty("user.home")).append("/.TXTRAP").toString());
+		            file1.mkdir();
+		        }
+				
+			  name.concat(".dat");
+			   String s1 = new StringBuilder().append(System.getProperty("user.home")).append("/.TXTRAP/").append(name.concat(".dat")).toString();
+			    try {
+			        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(s1));
+			        oos.writeObject(this);
+			        oos.close();
+			    } catch(Exception ex) {
+			        ex.printStackTrace();
+			    }
+			    break;
+			
 			default: Console.log("Command not found",Console.errorOutput);
 					break;
 
@@ -158,6 +217,72 @@ public class WorldFrame implements Processable{
 	
 	
 	
+	
+	public void loadedGame() {
+		Console.clearlog();
+		Console.logSingleLine("Loaded", Console.standartEvent);
+		Console.log("Welcome back, "+player.getName()+" the " + player.getGameClass(), Console.startOutput);
+		Console.log("You are in " +player.getCity().getCityName(), Console.startOutput);
+		
+	}
+
+	
+	
+	
+
+	@Override
+	public void run() {
+
+		long timeOld=System.currentTimeMillis();
+		while(gameRunning){
+		
+			
+			long timeNow=System.currentTimeMillis();
+			
+			if(timeOld+1000<timeNow){
+					time=time+((timeNow/1000)-(timeOld/1000));
+					timeOld=timeNow;
+			}
+			
+			try {
+				Thread.sleep(400);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		}
+		
+	}
+
+
+
+
+	
+	
+
+	/**
+	 * @return the cities
+	 */
+	public ArrayList<City> getCities() {
+		return cities;
+	}
+
+
+
+
+
+	/**
+	 * @param cities the cities to set
+	 */
+	public void setCities(ArrayList<City> cities) {
+		this.cities = cities;
+	}
+
+
+
+
 
 	/**
 	 * @return the player
@@ -188,13 +313,6 @@ public class WorldFrame implements Processable{
 	public void setMainFrame(MainFrame mainFrame) {
 		this.mainFrame = mainFrame;
 	}
-
-
-
-
-
-	
-
 
 
 

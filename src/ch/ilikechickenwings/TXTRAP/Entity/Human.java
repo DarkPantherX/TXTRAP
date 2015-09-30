@@ -4,6 +4,11 @@ import ch.ilikechickenwings.TXTRAP.City;
 
 public class Human extends Entity{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/** Saves the city the human lives in */
 	private City city;
 	

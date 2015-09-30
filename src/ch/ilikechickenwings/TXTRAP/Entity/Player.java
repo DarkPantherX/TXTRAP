@@ -1,15 +1,18 @@
 package ch.ilikechickenwings.TXTRAP.Entity;
 
-import ch.ilikechickenwings.TXTRAP.Frames.WorldFrame;
 import ch.ilikechickenwings.TXTRAP.City;;
 
 public class Player extends Human{
 	
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String gameClass;
 
-	public Player(String name, String gameClass) {
-		super(100.0f, name, (City)WorldFrame.cities.get(0));
+	public Player(String name, String gameClass, City city) {
+		super(100.0f, name, city);
 		setGameClass(gameClass);
 	}
 

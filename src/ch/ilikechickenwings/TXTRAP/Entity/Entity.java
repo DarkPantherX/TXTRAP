@@ -1,10 +1,15 @@
 package ch.ilikechickenwings.TXTRAP.Entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Entity implements Damageable{
+public class Entity implements Damageable, Serializable{
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/** The health an entity has*/
 	private float health;
 	/** The maximal health an entity can have*/

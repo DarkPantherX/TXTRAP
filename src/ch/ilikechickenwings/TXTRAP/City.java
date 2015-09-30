@@ -1,11 +1,17 @@
 package ch.ilikechickenwings.TXTRAP;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import ch.ilikechickenwings.TXTRAP.Entity.Entity;
 import ch.ilikechickenwings.TXTRAP.Frames.WorldFrame;
 
-public class City {
+public class City implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * ArrayList with enitites in the city
 	 */
