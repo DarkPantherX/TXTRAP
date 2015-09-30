@@ -175,6 +175,7 @@ public class MainFrame implements ActionListener, Processable , Serializable{
 				
 				processable.processInput(s);
 				
+				tField.requestFocus();
 				tField.setText("");
 			}
 		}
