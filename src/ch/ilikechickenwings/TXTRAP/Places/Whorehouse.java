@@ -33,20 +33,23 @@ public class Whorehouse extends Place{
 		case "fuck":
 			for(int i=0;i<getHumans().size();i++){
 				Human h = (Human) getHumans().get(i);
-				if(s[1].toLowerCase().equals(h.getName())||h instanceof Whore){
+				if(s[1].toLowerCase().equals(h.getName().toLowerCase())&&h instanceof Whore){
 					Whore w = (Whore)h;
 					Console.log("You fucked " +h.getName(),Console.standartEvent);
 					w.setTimesHadSex(w.getTimesHadSex()+1);
 					
+				}else{
+					
+					Console.log("Whore not found", Console.errorOutput);
 				}
 				
 			}
 			
 			break;
-		case "talk":
+		case "talkto":
 			for(int i=0;i<getHumans().size();i++){
 				Human h = (Human) getHumans().get(i);
-				if(s[1].toLowerCase().equals(h.getName())||h instanceof Whore){
+				if(s[1].toLowerCase().equals(h.getName().toLowerCase())&&h instanceof Whore){
 			Whore w= (Whore) h;
 			Console.log(w.getResponseLine());
 			}
