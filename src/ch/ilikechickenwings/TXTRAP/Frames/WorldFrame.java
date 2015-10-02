@@ -122,8 +122,6 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 						--i;
 						if(!notFound){
 							player.setCity(c);
-							Place p=c.getPlaces().get(0);
-							player.setPlace(p);
 							Console.log("You went to: " + c.getCityName(), Console.standartEvent);
 						}else if(i<0){
 							break;
@@ -223,10 +221,33 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 			    } catch(Exception ex) {
 			        ex.printStackTrace();
 			    }
+			    
+			    Console.log("Game saved",Console.standartEvent);;
 			    break;
 			    
 			case "interact":
-				player.getPlace().interact(player);
+			if(s.length>1){
+				Place p1=null;
+				for(int i3=0;i3<player.getCity().getPlaces().size();i3++){
+					
+					Place p = (Place) player.getCity().getPlaces().get(i3);
+					System.out.println(p);
+					if (s[1].toLowerCase().equals(p.getName().toLowerCase())){
+						p1=p;
+					}
+					
+				if(p1!=null){
+					player.setPlace(p1);
+					player.getPlace().interact(player);
+					
+					}else{
+						Console.log("Place not found",Console.errorOutput);
+						
+					}
+				}
+				}else{
+					Console.log("use: interact <place>",Console.errorOutput);
+				}
 				break;
 			
 			default: Console.log("Command not found",Console.errorOutput);

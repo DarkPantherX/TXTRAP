@@ -18,6 +18,7 @@ public class Whorehouse extends Place{
 
 	public Whorehouse(WorldFrame wF) {
 		setWorldFrame(wF);
+		setName("Whorehouse");
 	}
 
 	@Override
@@ -26,9 +27,7 @@ public class Whorehouse extends Place{
 		case "help":
 			Console.log("Available commands:"
 					+"\n fuck <name of whore> -> shows the items to sell"
-					+"\n showgirls -> shows the name of the girls"
-					+"\n sell <item name> <optional: quantity> -> shows the items to sell"
-					+"\n stop -> Stops the interaction");
+					+"\n showgirls -> shows the name of the girls");
 			break;
 		case "fuck":
 			for(int i=0;i<getHumans().size();i++){
@@ -46,7 +45,19 @@ public class Whorehouse extends Place{
 			}
 			
 			break;
-		case "talkto":
+		case "showgirls":
+			Console.log("There are following whores available: ",Console.standartOutput);
+			for(int i=0;i<getHumans().size();i++){
+				Human h = (Human) getHumans().get(i);
+				if(h instanceof Whore){
+					Console.logSingleLine(h.getName()+" ",Console.standartListOutput);
+					
+				}
+				
+			}
+			
+			break;
+		case "talk":
 			for(int i=0;i<getHumans().size();i++){
 				Human h = (Human) getHumans().get(i);
 				if(s[1].toLowerCase().equals(h.getName().toLowerCase())&&h instanceof Whore){
@@ -56,10 +67,14 @@ public class Whorehouse extends Place{
 				}
 				
 				break;
-		case "stop":
+		case "leave":
 			stopInteract(null);
+			getWorldFrame().getPlayer().setPlace(null);
+			Console.clearlog();
+			Console.logSingleLine("You left the whorehouse",Console.standartEvent);
 			break;
 		default:
+			Console.log("Command not found",Console.errorOutput);
 			break;
 			
 		}

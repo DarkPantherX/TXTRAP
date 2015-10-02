@@ -22,6 +22,7 @@ public class Market extends Place{
 	
 	
 	public Market(WorldFrame wF){
+		setName("Market");
 		setWorldFrame(wF);
 		
 		
@@ -92,8 +93,11 @@ public class Market extends Place{
 				break;
 			case "sell":
 				break;
-			case "stop":
+			case "leave":
 				stopInteract(null);
+				Console.clearlog();
+				getWorldFrame().getPlayer().setPlace(null);
+				Console.logSingleLine("You left the market",Console.standartEvent);
 				break;
 			default:
 				Console.log("Command not found",Console.errorOutput);
@@ -109,7 +113,7 @@ public class Market extends Place{
 	public void interact(Player player) {
 		getWorldFrame().getMainFrame().setProcessable(this);
 		Console.clearlog();
-		Console.log("Welcome to the market, write 'help' for more information");
+		Console.logSingleLine("Welcome to the market, write 'help' for more information");
 		
 		
 	}
