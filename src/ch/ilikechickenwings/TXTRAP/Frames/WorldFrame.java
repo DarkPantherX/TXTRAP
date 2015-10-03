@@ -12,6 +12,7 @@ import ch.ilikechickenwings.TXTRAP.Frames.Processable;
 import ch.ilikechickenwings.TXTRAP.Places.Market;
 import ch.ilikechickenwings.TXTRAP.Places.Place;
 import ch.ilikechickenwings.TXTRAP.Places.Whorehouse;
+import ch.ilikechickenwings.TXTRAP.Entity.Gold;
 import ch.ilikechickenwings.TXTRAP.Entity.Whore;
 import ch.ilikechickenwings.TXTRAP.Entity.Item;
 import ch.ilikechickenwings.TXTRAP.Entity.Player;
@@ -63,6 +64,7 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 	public WorldFrame(Player player, MainFrame mF, String name1){
 		this(mF,name1);
 		setPlayer(player);
+
 		
 		Console.log(player.getName()+" wakes up in " + player.getCity().getCityName(), Console.standartOutput);
 		Console.log("Type help for available commands" , Console.standartOutput);
@@ -86,6 +88,7 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 		city=new City("Ass");
 		cities.add(city);
 		
+
 		
 		Whorehouse h= new Whorehouse(this);
 		Whore h1= new Whore(100, "Anna", city, "", h);
