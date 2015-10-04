@@ -30,8 +30,7 @@ public class Whorehouse extends Place{
 					+"\n showgirls -> shows the name of the girls");
 			break;
 		case "fuck":
-			for(int i=0;i<getHumans().size();i++){
-				Human h = (Human) getHumans().get(i);
+			for(Human h: getHumans()){
 				if(s[1].toLowerCase().equals(h.getName().toLowerCase())&&h instanceof Whore){
 					Whore w = (Whore)h;
 					Console.log("You fucked " +h.getName(),Console.standartEvent);
@@ -47,8 +46,7 @@ public class Whorehouse extends Place{
 			break;
 		case "showgirls":
 			Console.log("There are following whores available: ",Console.standartOutput);
-			for(int i=0;i<getHumans().size();i++){
-				Human h = (Human) getHumans().get(i);
+			for(Human h : getHumans()){
 				if(h instanceof Whore){
 					Console.logSingleLine(h.getName()+" ",Console.standartListOutput);
 					
@@ -58,11 +56,10 @@ public class Whorehouse extends Place{
 			
 			break;
 		case "talk":
-			for(int i=0;i<getHumans().size();i++){
-				Human h = (Human) getHumans().get(i);
-				if(s[1].toLowerCase().equals(h.getName().toLowerCase())&&h instanceof Whore){
-			Whore w= (Whore) h;
-			Console.log(w.getResponseLine());
+			for(Human h : getHumans()){
+				if(s[1].toLowerCase().equals(h.getName().toLowerCase())){
+			Console.log(h.getResponseLine());
+			break;
 			}
 				}
 				

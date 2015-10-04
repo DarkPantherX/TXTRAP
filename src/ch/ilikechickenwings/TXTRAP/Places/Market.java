@@ -3,9 +3,7 @@ package ch.ilikechickenwings.TXTRAP.Places;
 import java.util.ArrayList;
 
 import ch.ilikechickenwings.TXTRAP.Console;
-import ch.ilikechickenwings.TXTRAP.Entity.Gold;
 import ch.ilikechickenwings.TXTRAP.Entity.Item;
-import ch.ilikechickenwings.TXTRAP.Entity.MarketItem;
 import ch.ilikechickenwings.TXTRAP.Entity.Player;
 import ch.ilikechickenwings.TXTRAP.Frames.WorldFrame;
 
@@ -42,41 +40,40 @@ public class Market extends Place{
 				break;
 			case "showitems":
 				Console.log("On the market available is: ", Console.standartOutput);
-				MarketItem it;
+				
 				if(items.size()>0){
-					for(int i2=0;i2<items.size();i2++){
-					it = (MarketItem) items.get(i2);
-					Console.log("->"+it.getName(), Console.standartListOutput);
+					for(Item it : items){
+					
+					Console.log("->"+it.getName()+" - "+it.getPrice()+" Gold", Console.standartListOutput);
 					}
 				}else{
 					Console.log("-->nothing<-- (market is poor as fuck)", Console.standartListOutput);
 				}
 				break;
 			case "buy":
+				if(s.length==3){
 				boolean done=false;
-				if(items.size()>0){
-					for(int i2=0;i2<items.size();i2++){
-					it =  (MarketItem)items.get(i2);
-					if(s[1].toLowerCase().equals(it.getName().toLowerCase())){
-						for(int i3=0;i3<getWorldFrame().getPlayer().getInventory().size();i3++){
-							Item im=(Item)getWorldFrame().getPlayer().getInventory().get(i3);
-							if(im instanceof Gold){
-								if(im.getQuantity()>=Integer.parseInt(s[2])*it.getPrice()){
-									im.setQuantity(im.getQuantity()-Integer.parseInt(s[2])*it.getPrice());
+				ArrayList<Item> pItems=getWorldFrame().getPlayer().getInventory();
+					for(Item m : items){
+					if(s[1].toLowerCase().equals(m.getName().toLowerCase())){
+						for(Item mp : pItems){
+							if(mp.getName().toLowerCase().equals("gold")){
+								if(mp.getQuantity()>=Integer.parseInt(s[2])*m.getPrice()){
+									mp.setQuantity(mp.getQuantity()-Integer.parseInt(s[2])*m.getPrice());
 									
-									for(int i4=0;i4<getWorldFrame().getPlayer().getInventory().size();i4++){
-										Item i1= getWorldFrame().getPlayer().getInventory().get(i3);
-										if(i1.getName().equals(it.getName())){
-											i1.setQuantity(i1.getQuantity()+Integer.parseInt(s[2]));
-										}else{
-											getWorldFrame().getPlayer().getInventory().add(new Item(it.getName(),Integer.parseInt(s[2])));
-											
+									for(Item nm : pItems){
+						
+										if(nm.getName().equals(m.getName())){
+											nm.setQuantity(nm.getQuantity()+Integer.parseInt(s[2]));
+											done=true;
 										}
-										
 									}
+									if(!done){
+										pItems.add(new Item(m.getName(),Integer.parseInt(s[2])));		
+									}
+									break;
 								}
-								done=true;
-								break;
+							
 								
 							}
 							
@@ -85,13 +82,54 @@ public class Market extends Place{
 					
 							}
 					if(done){
+						Console.log("You bought "+s[2]+"x"+s[1],Console.standartEvent);
 						break;
 					}
 						}
-					}
+					
+				if(!done){
+					Console.log("Can't buy this",Console.errorOutput);
+				}
 				
+				}else{
+					Console.log("Commend was used wrong: buy <item> <quantity>",Console.errorOutput);
+				}
 				break;
 			case "sell":
+				
+				if(s.length==3){
+				 boolean done=false;
+				ArrayList<Item> pItems=getWorldFrame().getPlayer().getInventory();
+					for(Item m : pItems){
+					if(s[1].toLowerCase().equals(m.getName().toLowerCase())){
+							
+								if(m.getQuantity()>=Integer.parseInt(s[2])){
+									m.setQuantity(m.getQuantity()-Integer.parseInt(s[2]));
+									
+									for(Item nm : pItems){
+						
+										if(nm.getName().toLowerCase().equals("gold")){
+											nm.setQuantity(nm.getQuantity()+Integer.parseInt(s[2])*(m.getPrice()/2));
+											done=true;
+											break;
+										}
+									}
+									
+									
+								}
+					
+							}
+					if(done){
+						break;
+					}
+						}
+					if(!done){
+						Console.log("Can't sell item",Console.errorOutput);
+					}
+				}else{
+					Console.log("Commend was used wrong: sell <item> <quantity>",Console.errorOutput);
+				}
+				
 				break;
 			case "leave":
 				stopInteract(null);

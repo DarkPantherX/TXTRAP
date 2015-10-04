@@ -10,6 +10,7 @@ public class Item implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private int quantity;
+	private int price;
 	
 	
 	public Item(String name2, int quantity){
@@ -41,6 +42,14 @@ public class Item implements Serializable{
 	 */
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
 	}
 	
 	
