@@ -10,12 +10,14 @@ public class Item implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private int quantity;
-	private int price;
+	private float price;
+	private float damageValue;
 	
 	
-	public Item(String name2, int quantity){
+	public Item(String name2, int quantity, float price2){
 		setName(name2);
 		setQuantity(quantity);
+		setPrice(price2);
 		
 	}
 	
@@ -44,12 +46,20 @@ public class Item implements Serializable{
 		this.quantity = quantity;
 	}
 
-	public int getPrice() {
+	public float getPrice() {
 		return price;
 	}
 
-	public void setPrice(int price) {
-		this.price = price;
+	public void setPrice(float price2) {
+		this.price = price2;
+	}
+
+	public float getDamageValue() {
+		return damageValue;
+	}
+
+	public void setDamageValue(float damageValue) {
+		this.damageValue = damageValue;
 	}
 	
 	

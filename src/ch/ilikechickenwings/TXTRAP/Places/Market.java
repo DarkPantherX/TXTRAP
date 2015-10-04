@@ -36,7 +36,8 @@ public class Market extends Place{
 						+"\n showitems -> shows the items to sell"
 						+"\n buy <item name> <optinal: quantity> -> buys the item"
 						+"\n sell <item name> <optional: quantity> -> shows the items to sell"
-						+"\n stop -> Stops the interaction");
+						+"\n inventory -> shows your inventory"
+						+"\n leave -> Stops the interaction");
 				break;
 			case "showitems":
 				Console.log("On the market available is: ", Console.standartOutput);
@@ -59,7 +60,7 @@ public class Market extends Place{
 						for(Item mp : pItems){
 							if(mp.getName().toLowerCase().equals("gold")){
 								if(mp.getQuantity()>=Integer.parseInt(s[2])*m.getPrice()){
-									mp.setQuantity(mp.getQuantity()-Integer.parseInt(s[2])*m.getPrice());
+									mp.setQuantity((int)(mp.getQuantity()-Integer.parseInt(s[2])*m.getPrice()));
 									
 									for(Item nm : pItems){
 						
@@ -69,7 +70,8 @@ public class Market extends Place{
 										}
 									}
 									if(!done){
-										pItems.add(new Item(m.getName(),Integer.parseInt(s[2])));		
+										pItems.add(new Item(m.getName(),Integer.parseInt(s[2]),m.getPrice()));	
+										done=true;
 									}
 									break;
 								}
@@ -82,7 +84,7 @@ public class Market extends Place{
 					
 							}
 					if(done){
-						Console.log("You bought "+s[2]+"x"+s[1],Console.standartEvent);
+						Console.log("You bought "+s[2]+"x "+s[1],Console.standartEvent);
 						break;
 					}
 						}
@@ -109,7 +111,7 @@ public class Market extends Place{
 									for(Item nm : pItems){
 						
 										if(nm.getName().toLowerCase().equals("gold")){
-											nm.setQuantity(nm.getQuantity()+Integer.parseInt(s[2])*(m.getPrice()/2));
+											nm.setQuantity((int)(nm.getQuantity()+Integer.parseInt(s[2])*(m.getPrice()/2)));
 											done=true;
 											break;
 										}
@@ -120,6 +122,7 @@ public class Market extends Place{
 					
 							}
 					if(done){
+						Console.log("You sold "+s[2] +"x "+m.getName());
 						break;
 					}
 						}
@@ -131,6 +134,23 @@ public class Market extends Place{
 				}
 				
 				break;
+			case "inventory":
+				Console.log("In your Inventory is: ", Console.standartOutput);
+					if(getWorldFrame().getPlayer().getInventory().size()>0){
+						for(Item mm : getWorldFrame().getPlayer().getInventory()){
+						
+						if(mm.getQuantity()<0){
+							getWorldFrame().getPlayer().getInventory().remove(mm);
+				
+						}else{
+						Console.log("->"+Integer.toString(mm.getQuantity())+"x "+mm.getName(), Console.standartListOutput);
+						}
+						}
+					}else{
+						Console.log("-->nothing<-- (poor as fuck...)", Console.standartListOutput);
+					}
+				
+					break;
 			case "leave":
 				stopInteract(null);
 				Console.clearlog();
@@ -161,6 +181,22 @@ public class Market extends Place{
 	public void stopInteract(Player player) {
 		getWorldFrame().getMainFrame().setProcessable(getWorldFrame());
 		
+	}
+
+
+	/**
+	 * @return the items
+	 */
+	public ArrayList<Item> getItems() {
+		return items;
+	}
+
+
+	/**
+	 * @param items the items to set
+	 */
+	public void setItems(ArrayList<Item> items) {
+		this.items = items;
 	}
 
 }
