@@ -113,7 +113,8 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 						+ "\n time ->shows the current time"
 						+ "\n interact <place> ->Interact with a place in this city"
 						+ "\n work <hours> ->Work to get 100 gold per hour"
-						+ "\n save ->Saves the game", Console.standartOutput);
+						+ "\n save ->Saves the game"
+						+ "\n rite <amount of health> -> Sacrifice a bit of your health to gain gold from SATAN!", Console.standartOutput);
 					break;
 			case "goto":
 				if(s.length>1){
@@ -158,10 +159,12 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 				Console.log("Your name is " +player.getName()+" the "+ player.getGameClass(),Console.standartOutput);
 				Console.log("Health: ", Console.standartOutput);
 				int h1= (int)(player.getHealth()/player.getMaxHealth()*10);
+				
 				for(int i1=0;i1<10;i1++){
 					if(h1>0){
 						Console.logSingleLine("O");
 						h1--;
+						
 					}else{
 						Console.logSingleLine("X");
 					}
@@ -259,6 +262,35 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 					new WorkTimer(player,Integer.parseInt(s[1]),this);
 				}else{
 					Console.log("Command was used wrong: work <hours>");
+				}
+				break;
+			case "rite":
+				if(s.length==2 ){
+					int a = Integer.parseInt(s[1]);
+					if(player.getHealth()-a*10<0){
+						Console.log("You cannot sacrifice that amount of health. ");
+					}else{
+					player.getDamaged(10*a);
+					boolean done=false;
+					for(Item ite : player.getInventory()){
+						if(ite.getName().toLowerCase().equals("gold")){
+							ite.setQuantity(ite.getQuantity()+100*a);
+							Console.log("You sacrificed "+a*10+"% of your health to gain "+a*100+" gold.");
+							done=true;
+							break;
+						}
+						
+					}
+					if(!done){
+					
+						Item as = new Item("Gold",100*a,1);
+						player.getInventory().add(as);
+						Console.log("You sacrificed "+a*10+"% of your health to gain "+a*100+" gold.");
+
+					}
+					}
+					}else{
+					Console.log("Command was used wrong: rite <amount of health>");	
 				}
 				break;
 			default: Console.log("Command not found",Console.errorOutput);
