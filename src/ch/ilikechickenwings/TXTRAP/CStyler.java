@@ -1,9 +1,14 @@
 package ch.ilikechickenwings.TXTRAP;
 import java.awt.Color;
+import java.io.Serializable;
 
 
-public class CStyler {
+public class CStyler implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Color foreground;
 	private Color background;
 	private boolean bold;

@@ -145,6 +145,10 @@ public class MainFrame implements ActionListener, Processable , Serializable{
 		        	
 		        }
 		        break;
+			case "online":
+				OnlineFrame o = new OnlineFrame(this);
+				processable=new LoginFrame(o);
+				break;
 			default: Console.log("Command not found", Console.errorOutput);
 					break;
 
