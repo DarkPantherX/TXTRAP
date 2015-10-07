@@ -108,14 +108,14 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 				
 					break;
 			case "help":
-				Console.log("Available commands: \n map ->Showes Cities "
-						+ "\n goto <cityname> ->You go to the chosen city"
-						+ "\n status ->Tells you how many lifes you have left"
-						+ "\n inventory -> Shoes you your inventory"
-						+ "\n time ->shows the current time"
-						+ "\n interact <place> ->Interact with a place in this city"
-						+ "\n work <hours> ->Work to get 100 gold per hour"
-						+ "\n save ->Saves the game"
+				Console.log("Available commands: \n map -> Shows cities "
+						+ "\n goto <cityname> -> You go to the chosen city"
+						+ "\n status -> Tells you how many lifes you have left"
+						+ "\n inventory -> Shows you your inventory"
+						+ "\n time -> Shows the current time"
+						+ "\n interact <place> -> Interact with a place in this city"
+						+ "\n work <hours> -> Work to get 100 gold per hour"
+						+ "\n save -> Saves the game"
 						+ "\n rite <amount of health> -> Sacrifice a bit of your health to gain gold from SATAN!", Console.standartOutput);
 					break;
 			case "goto":

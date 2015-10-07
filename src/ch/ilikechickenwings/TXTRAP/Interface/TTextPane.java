@@ -77,7 +77,7 @@ public class TTextPane extends JTextPane{
 	StyleConstants.setBackground(keyWord, c.getBackground());
 	StyleConstants.setBold(keyWord, c.isBold());
 	StyleConstants.setItalic(keyWord, c.isItalic());
-
+	StyleConstants.setFontFamily(keyWord, c.getFontFamily());
 	//  Add some text
 
 	try
