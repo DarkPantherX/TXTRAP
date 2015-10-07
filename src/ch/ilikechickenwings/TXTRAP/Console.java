@@ -26,23 +26,31 @@ public class Console {
 	
 	public static void log(String s){
 		tPane.appendLine(s);
+		tPane.setCaretPosition(tPane.getDocument().getLength());
+
 		
 		
 	}
 	
 	public static void log(String s, CStyler c){
 		tPane.appendLine(s,c);
+		tPane.setCaretPosition(tPane.getDocument().getLength());
+
 		
 	}
 	
 	public static void logSingleLine(String s){
 		tPane.append(s);
+		tPane.setCaretPosition(tPane.getDocument().getLength());
+
 		
 		
 	}
 	
 	public static void clearlog(){
 		tPane.setText("");
+		tPane.setCaretPosition(tPane.getDocument().getLength());
+
 		
 		
 	}
@@ -51,6 +59,7 @@ public class Console {
 
 	public static void logSingleLine(String string, CStyler styler) {
 		tPane.append(string, styler);
+		tPane.setCaretPosition(tPane.getDocument().getLength());
 		
 	}
 

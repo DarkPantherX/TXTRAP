@@ -3,9 +3,7 @@ package ch.ilikechickenwings.TXTRAP.Places;
 import java.util.ArrayList;
 
 import ch.ilikechickenwings.TXTRAP.Console;
-import ch.ilikechickenwings.TXTRAP.Entity.Gold;
 import ch.ilikechickenwings.TXTRAP.Entity.Item;
-import ch.ilikechickenwings.TXTRAP.Entity.MarketItem;
 import ch.ilikechickenwings.TXTRAP.Entity.Player;
 import ch.ilikechickenwings.TXTRAP.Frames.WorldFrame;
 
@@ -18,14 +16,14 @@ public class Market extends Place{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private ArrayList<MarketItem> items = new ArrayList<MarketItem>();
+	private ArrayList<Item> items = new ArrayList<Item>();
 	
 	
 	public Market(WorldFrame wF){
 		setName("Market");
 		setWorldFrame(wF);
-		items.add(new MarketItem("Bananas",10));
-	
+		items.add(new Item("bananas",50,10));
+		
 	}
 	
 	
@@ -37,57 +35,123 @@ public class Market extends Place{
 				Console.log("Available commands:"
 						+"\n showitems -> shows the items to sell"
 						+"\n buy <item name> <optinal: quantity> -> buys the item"
-						+"\n sell <item name> <optional: quantity> -> sells the item"
-						+"\n leave -> leave the market");
+						+"\n sell <item name> <optional: quantity> -> shows the items to sell"
+						+"\n inventory -> shows your inventory"
+						+"\n leave -> Stops the interaction");
 				break;
 			case "showitems":
 				Console.log("On the market available is: ", Console.standartOutput);
-				MarketItem it;
-				System.out.println(items.size());
+				
 				if(items.size()>0){
-					for(int i2=0;i2<items.size();i2++){
-					it = (MarketItem)items.get(i2);
-					Console.log("-> "+it.getName()+"\t"+it.getPrice(), Console.standartListOutput);
+					for(Item it : items){
+					
+					Console.log("->"+it.getName()+" - "+it.getPrice()+" Gold", Console.standartListOutput);
 					}
 				}else{
 					Console.log("-->nothing<-- (market is poor as fuck)", Console.standartListOutput);
 				}
 				break;
 			case "buy":
-				MarketItem item=null;
-				for(int i=0;i<items.size();i++){
-					if(s[1].toLowerCase().equals(items.get(i).getName().toLowerCase()))
-						item=items.get(i);
+				if(s.length==3){
+				boolean done=false;
+				ArrayList<Item> pItems=getWorldFrame().getPlayer().getInventory();
+					for(Item m : items){
+					if(s[1].toLowerCase().equals(m.getName().toLowerCase())){
+						for(Item mp : pItems){
+							if(mp.getName().toLowerCase().equals("gold")){
+								if(mp.getQuantity()>=Integer.parseInt(s[2])*m.getPrice()){
+									mp.setQuantity((int)(mp.getQuantity()-Integer.parseInt(s[2])*m.getPrice()));
+									
+									for(Item nm : pItems){
+						
+										if(nm.getName().equals(m.getName())){
+											nm.setQuantity(nm.getQuantity()+Integer.parseInt(s[2]));
+											done=true;
+										}
+									}
+									if(!done){
+										pItems.add(new Item(m.getName(),Integer.parseInt(s[2]),m.getPrice()));	
+										done=true;
+									}
+									break;
+								}
+							
+								
+							}
+							
+						}
+						
+					
+							}
+					if(done){
+						Console.log("You bought "+s[2]+"x "+s[1],Console.standartEvent);
+						break;
+					}
+						}
+					
+				if(!done){
+					Console.log("Can't buy this",Console.errorOutput);
 				}
-				if(item==null){ // item does not exist in this shop
-					Console.log("You cannot buy "+s[1]+" here.", Console.standartOutput);
-				}else{ // item exists
-					Gold gold=new Gold(0);
-					ArrayList<Item> inventory = getWorldFrame().getPlayer().getInventory();
-					for(int i=0;i<inventory.size();i++){
-						if(inventory.get(i) instanceof Gold)
-							gold=(Gold) inventory.get(i);
-					}
-					
-					item.setQuantity(1);
-					if(s.length>2)
-						item.setQuantity(Integer.parseInt(s[2]));
-					
-					if(item.getPrice()*item.getQuantity()>gold.getQuantity()){ // too expensive
-						Console.log(item.getQuantity()+" "+s[1]+" is too expensive.", Console.standartOutput);
-					}else{ // buy it
-						gold.setQuantity(gold.getQuantity()-item.getPrice()*item.getQuantity());
-						inventory.add(item);
-						Console.log("You bought "+item.getQuantity()+" "+item.getName()+" for "+item.getPrice()+" gold each."
-									+"\n You have "+gold.getQuantity()+" gold left.", Console.standartOutput);
-					}
-				} // end check if item exists
 				
+				}else{
+					Console.log("Commend was used wrong: buy <item> <quantity>",Console.errorOutput);
+				}
 				break;
 			case "sell":
+				
+				if(s.length==3){
+				 boolean done=false;
+				ArrayList<Item> pItems=getWorldFrame().getPlayer().getInventory();
+					for(Item m : pItems){
+					if(s[1].toLowerCase().equals(m.getName().toLowerCase())){
+							
+								if(m.getQuantity()>=Integer.parseInt(s[2])){
+									m.setQuantity(m.getQuantity()-Integer.parseInt(s[2]));
+									
+									for(Item nm : pItems){
+						
+										if(nm.getName().toLowerCase().equals("gold")){
+											nm.setQuantity((int)(nm.getQuantity()+Integer.parseInt(s[2])*(m.getPrice()/2)));
+											done=true;
+											break;
+										}
+									}
+									
+									
+								}
+					
+							}
+					if(done){
+						Console.log("You sold "+s[2] +"x "+m.getName());
+						break;
+					}
+						}
+					if(!done){
+						Console.log("Can't sell item",Console.errorOutput);
+					}
+				}else{
+					Console.log("Commend was used wrong: sell <item> <quantity>",Console.errorOutput);
+				}
+				
 				break;
+			case "inventory":
+				Console.log("In your Inventory is: ", Console.standartOutput);
+					if(getWorldFrame().getPlayer().getInventory().size()>0){
+						for(Item mm : getWorldFrame().getPlayer().getInventory()){
+						
+						if(mm.getQuantity()<0){
+							getWorldFrame().getPlayer().getInventory().remove(mm);
+				
+						}else{
+						Console.log("->"+Integer.toString(mm.getQuantity())+"x "+mm.getName(), Console.standartListOutput);
+						}
+						}
+					}else{
+						Console.log("-->nothing<-- (poor as fuck...)", Console.standartListOutput);
+					}
+				
+					break;
 			case "leave":
-			case "stop":
 				stopInteract(null);
 				Console.clearlog();
 				getWorldFrame().getPlayer().setPlace(null);
@@ -117,6 +181,22 @@ public class Market extends Place{
 	public void stopInteract(Player player) {
 		getWorldFrame().getMainFrame().setProcessable(getWorldFrame());
 		
+	}
+
+
+	/**
+	 * @return the items
+	 */
+	public ArrayList<Item> getItems() {
+		return items;
+	}
+
+
+	/**
+	 * @param items the items to set
+	 */
+	public void setItems(ArrayList<Item> items) {
+		this.items = items;
 	}
 
 }

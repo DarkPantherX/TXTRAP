@@ -16,7 +16,7 @@ public class Player extends Human{
 	public Player(String name, String gameClass, City city, Place place) {
 		super(100.0f, name, city,"",place);
 		setGameClass(gameClass);
-		getInventory().add(new Gold(100));
+		getInventory().add(new Item("gold",100,0));
 	}
 
 

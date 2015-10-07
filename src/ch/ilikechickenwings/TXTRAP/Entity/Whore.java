@@ -21,7 +21,15 @@ public class Whore extends Human{
 	@Override
 	public String getResponseLine() {
 		// TODO Auto-generated method stub
-		return "I was fucked "+timesHadSex+" times!";
+		
+		String t=null;
+		if(timesHadSex<2){
+			t=" time";
+		}else{
+			t=" times";
+		}
+		
+		return "I was fucked "+timesHadSex+t;
 	}
 
 

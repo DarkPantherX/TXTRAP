@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import ch.ilikechickenwings.TXTRAP.City;
 import ch.ilikechickenwings.TXTRAP.Console;
 import ch.ilikechickenwings.TXTRAP.Frames.Processable;
+import ch.ilikechickenwings.TXTRAP.Interface.WorkTimer;
 import ch.ilikechickenwings.TXTRAP.Places.Market;
 import ch.ilikechickenwings.TXTRAP.Places.Place;
 import ch.ilikechickenwings.TXTRAP.Places.Whorehouse;
-import ch.ilikechickenwings.TXTRAP.Entity.Gold;
 import ch.ilikechickenwings.TXTRAP.Entity.Whore;
 import ch.ilikechickenwings.TXTRAP.Entity.Item;
 import ch.ilikechickenwings.TXTRAP.Entity.Player;
@@ -77,6 +77,7 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 		City city = new City("Tamariel");
 		
 		Market m = new Market(this);
+		m.getItems().add(new Item("Sword",0,50));
 		city.getPlaces().add(m);
 		cities.add(city);
 		city = new City("Bananistan");
@@ -110,7 +111,12 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 				Console.log("Available commands: \n map ->Showes Cities "
 						+ "\n goto <cityname> ->You go to the chosen city"
 						+ "\n status ->Tells you how many lifes you have left"
-						+ "\n inventory -> Shoes you your inventory", Console.standartOutput);
+						+ "\n inventory -> Shoes you your inventory"
+						+ "\n time ->shows the current time"
+						+ "\n interact <place> ->Interact with a place in this city"
+						+ "\n work <hours> ->Work to get 100 gold per hour"
+						+ "\n save ->Saves the game"
+						+ "\n rite <amount of health> -> Sacrifice a bit of your health to gain gold from SATAN!", Console.standartOutput);
 					break;
 			case "goto":
 				if(s.length>1){
@@ -155,10 +161,12 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 				Console.log("Your name is " +player.getName()+" the "+ player.getGameClass(),Console.standartOutput);
 				Console.log("Health: ", Console.standartOutput);
 				int h1= (int)(player.getHealth()/player.getMaxHealth()*10);
+				
 				for(int i1=0;i1<10;i1++){
 					if(h1>0){
 						Console.logSingleLine("O");
 						h1--;
+						
 					}else{
 						Console.logSingleLine("X");
 					}
@@ -172,15 +180,14 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 					break;
 			case "inventory":
 				Console.log("In your Inventory is: ", Console.standartOutput);
-					Item it;
+
 					if(player.getInventory().size()>0){
-						for(int i2=0;i2<player.getInventory().size();i2++){
-						it = (Item) player.getInventory().get(i2);
-						if(it.getQuantity()==0){
-							player.getInventory().remove(it);
-				
+						for(Item mm : player.getInventory()){
+						if(mm.getQuantity()==0){
+							player.getInventory().remove(mm);
+						}else{
+						Console.log("->"+Integer.toString(mm.getQuantity())+"x "+mm.getName(), Console.standartListOutput);
 						}
-						Console.log("->"+Integer.toString(it.getQuantity())+"x "+it.getName(), Console.standartListOutput);
 						}
 					}else{
 						Console.log("-->nothing<-- (poor as fuck...)", Console.standartListOutput);
@@ -252,7 +259,42 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 					Console.log("use: interact <place>",Console.errorOutput);
 				}
 				break;
-			
+			case "work":
+				if(s.length==2){
+					new WorkTimer(player,Integer.parseInt(s[1]),this);
+				}else{
+					Console.log("Command was used wrong: work <hours>");
+				}
+				break;
+			case "rite":
+				if(s.length==2 ){
+					int a = Integer.parseInt(s[1]);
+					if(player.getHealth()-a*10<0){
+						Console.log("You cannot sacrifice that amount of health. ");
+					}else{
+					player.getDamaged(10*a);
+					boolean done=false;
+					for(Item ite : player.getInventory()){
+						if(ite.getName().toLowerCase().equals("gold")){
+							ite.setQuantity(ite.getQuantity()+100*a);
+							Console.log("You sacrificed "+a*10+"% of your health to gain "+a*100+" gold.");
+							done=true;
+							break;
+						}
+						
+					}
+					if(!done){
+					
+						Item as = new Item("Gold",100*a,1);
+						player.getInventory().add(as);
+						Console.log("You sacrificed "+a*10+"% of your health to gain "+a*100+" gold.");
+
+					}
+					}
+					}else{
+					Console.log("Command was used wrong: rite <amount of health>");	
+				}
+				break;
 			default: Console.log("Command not found",Console.errorOutput);
 					break;
 
@@ -343,6 +385,28 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
+
+
+	/**
+	 * @return the time
+	 */
+	public long getTime() {
+		return time;
+	}
+
+
+
+
+
+	/**
+	 * @param time the time to set
+	 */
+	public void setTime(long time) {
+		this.time = time;
+	}
+
+
+
 
 
 	/**
