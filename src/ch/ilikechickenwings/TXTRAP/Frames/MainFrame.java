@@ -173,7 +173,7 @@ public class MainFrame implements ActionListener, Processable , Serializable{
 
 			if (!tField.getText().trim().equals("")) {
 
-				Console.log(tField.getText(),Console.standartCommand);
+				Console.log(tField.getText(),Console.standardCommand);
 				tArea.setCaretPosition(tArea.getDocument().getLength());
 				String s[]=tField.getText().split(" ");
 				

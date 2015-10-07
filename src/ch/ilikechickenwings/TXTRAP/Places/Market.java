@@ -3,6 +3,7 @@ package ch.ilikechickenwings.TXTRAP.Places;
 import java.util.ArrayList;
 
 import ch.ilikechickenwings.TXTRAP.Console;
+import ch.ilikechickenwings.TXTRAP.Entity.Human;
 import ch.ilikechickenwings.TXTRAP.Entity.Item;
 import ch.ilikechickenwings.TXTRAP.Entity.Player;
 import ch.ilikechickenwings.TXTRAP.Frames.WorldFrame;
@@ -22,7 +23,7 @@ public class Market extends Place{
 	public Market(WorldFrame wF){
 		setName("Market");
 		setWorldFrame(wF);
-		items.add(new Item("bananas",50,10));
+		
 		
 	}
 	
@@ -37,19 +38,41 @@ public class Market extends Place{
 						+"\n buy <item name> <optinal: quantity> -> buys the item"
 						+"\n sell <item name> <optional: quantity> -> shows the items to sell"
 						+"\n inventory -> shows your inventory"
-						+"\n leave -> Stops the interaction");
+						+"\n leave -> Stops the interaction"
+						+"\n there may be hungry bandits around to bananize");
+					if(!getHumans().isEmpty())
+						Console.log("\nThere is a human around");
 				break;
 			case "showitems":
-				Console.log("On the market available is: ", Console.standartOutput);
+				Console.log("On the market available is: ", Console.standardOutput);
 				
 				if(items.size()>0){
 					for(Item it : items){
 					
-					Console.log("->"+it.getName()+" - "+it.getPrice()+" Gold", Console.standartListOutput);
+					Console.log("->"+it.getName()+" - "+it.getPrice()+" Gold", Console.standardListOutput);
 					}
 				}else{
-					Console.log("-->nothing<-- (market is poor as fuck)", Console.standartListOutput);
+					Console.log("-->nothing<-- (market is poor as fuck)", Console.standardListOutput);
 				}
+				break;
+			case "bananize":
+				Player p= getWorldFrame().getPlayer();
+				boolean tradeDone=false;
+				for(Human hu: getHumans()){
+					if(hu.getName().equals("Hungry Tom")){
+						for(Item item : p.getInventory()){
+							if(item.getName().equals("banana") && item.getQuantity()>0){
+								item.setQuantity(item.getQuantity()-1);
+								p.setHealth(p.getHealth()*5);
+								tradeDone=true;
+								Console.log("You gave the hungry bandit a banana and feel a boost of life", Console.standardOutput);
+							}
+						}
+					} // end if Hungry Tom
+					if(tradeDone)
+						getHumans().remove(hu);
+				}
+					
 				break;
 			case "buy":
 				if(s.length==3){
@@ -84,7 +107,7 @@ public class Market extends Place{
 					
 							}
 					if(done){
-						Console.log("You bought "+s[2]+"x "+s[1],Console.standartEvent);
+						Console.log("You bought "+s[2]+"x "+s[1],Console.standardEvent);
 						break;
 					}
 						}
@@ -135,7 +158,7 @@ public class Market extends Place{
 				
 				break;
 			case "inventory":
-				Console.log("In your Inventory is: ", Console.standartOutput);
+				Console.log("In your Inventory is: ", Console.standardOutput);
 					if(getWorldFrame().getPlayer().getInventory().size()>0){
 						for(Item mm : getWorldFrame().getPlayer().getInventory()){
 						
@@ -143,11 +166,11 @@ public class Market extends Place{
 							getWorldFrame().getPlayer().getInventory().remove(mm);
 				
 						}else{
-						Console.log("->"+Integer.toString(mm.getQuantity())+"x "+mm.getName(), Console.standartListOutput);
+						Console.log("->"+Integer.toString(mm.getQuantity())+"x "+mm.getName(), Console.standardListOutput);
 						}
 						}
 					}else{
-						Console.log("-->nothing<-- (poor as fuck...)", Console.standartListOutput);
+						Console.log("-->nothing<-- (poor as fuck...)", Console.standardListOutput);
 					}
 				
 					break;
@@ -155,7 +178,7 @@ public class Market extends Place{
 				stopInteract(null);
 				Console.clearlog();
 				getWorldFrame().getPlayer().setPlace(null);
-				Console.logSingleLine("You left the market",Console.standartEvent);
+				Console.logSingleLine("You left the market",Console.standardEvent);
 				break;
 			default:
 				Console.log("Command not found",Console.errorOutput);

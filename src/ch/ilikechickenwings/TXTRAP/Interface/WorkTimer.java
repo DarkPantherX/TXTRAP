@@ -30,8 +30,8 @@ public class WorkTimer implements Runnable, Processable, Serializable{
 		worldFrame.getMainFrame().setProcessable(this);
 		new Thread(this).start();
 		Console.clearlog();
-		Console.logSingleLine("You are now working " + hours +" hour(s)",Console.standartEvent);
-		Console.log("Type help for more informations",Console.standartOutput);
+		Console.logSingleLine("You are now working " + hours +" hour(s)",Console.standardEvent);
+		Console.log("Type help for more informations",Console.standardOutput);
 		
 	}
 	
@@ -56,7 +56,7 @@ public class WorkTimer implements Runnable, Processable, Serializable{
 				worldFrame.getMainFrame().setProcessable(worldFrame);
 				running=false;
 				Console.clearlog();
-				Console.logSingleLine("You got " +hours*100+" Gold for your work",Console.standartEvent);
+				Console.logSingleLine("You got " +hours*100+" Gold for your work",Console.standardEvent);
 			}else{
 				try {
 					Thread.sleep(1000L);
@@ -76,16 +76,16 @@ public class WorkTimer implements Runnable, Processable, Serializable{
 	public void processInput(String[] s) {
 		switch (s[0].toLowerCase()){
 		case "help":
-			Console.log("You are working right now, you can't do anything right now. You can stop working but you won't get any gold for your work. Use 'stop' to stop working. Use 'status' to see how long you have left.",Console.standartOutput);
+			Console.log("You are working right now, you can't do anything right now. You can stop working but you won't get any gold for your work. Use 'stop' to stop working. Use 'status' to see how long you have left.",Console.standardOutput);
 			break;
 		case "stop":
 			Console.clearlog();
-			Console.logSingleLine("You stoped working before the work ended",Console.standartEvent);
+			Console.logSingleLine("You stoped working before the work ended",Console.standardEvent);
 			running=false;
 			worldFrame.getMainFrame().setProcessable(worldFrame);
 			break;
 		case "status":
-			Console.log("Work hours left: " + (beginTime+(hours*60)-worldFrame.getTime())+ " from "+ hours*60+" minutes",Console.standartOutput);
+			Console.log("Work hours left: " + (beginTime+(hours*60)-worldFrame.getTime())+ " from "+ hours*60+" minutes",Console.standardOutput);
 			break;
 		default:
 			Console.log("Command not found",Console.errorOutput);

@@ -30,7 +30,6 @@ public abstract class Human extends Entity{
 	
 	
 	
-	
 	/**
 	 * @return the city
 	 */

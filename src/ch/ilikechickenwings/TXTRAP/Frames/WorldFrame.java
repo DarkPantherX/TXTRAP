@@ -7,12 +7,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import ch.ilikechickenwings.TXTRAP.City;
+import ch.ilikechickenwings.TXTRAP.Command;
 import ch.ilikechickenwings.TXTRAP.Console;
 import ch.ilikechickenwings.TXTRAP.Frames.Processable;
 import ch.ilikechickenwings.TXTRAP.Interface.WorkTimer;
 import ch.ilikechickenwings.TXTRAP.Places.Market;
 import ch.ilikechickenwings.TXTRAP.Places.Place;
 import ch.ilikechickenwings.TXTRAP.Places.Whorehouse;
+import ch.ilikechickenwings.TXTRAP.Entity.Bandit;
 import ch.ilikechickenwings.TXTRAP.Entity.Whore;
 import ch.ilikechickenwings.TXTRAP.Entity.Item;
 import ch.ilikechickenwings.TXTRAP.Entity.Player;
@@ -29,6 +31,7 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 	 * ArrayList with city in the worlds
 	 */
 	private ArrayList<City> cities = new ArrayList<City>();
+	private ArrayList<Command> commands = new ArrayList<Command>();
 	private boolean gameRunning=true;
 	private String name;
 	
@@ -51,7 +54,7 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 		createWorld();
 		new Thread(this).start();
 		name=name1;
-		Console.log("Type help for available commands", Console.standartOutput);
+		Console.log("Type help for available commands", Console.standardOutput);
 	}
 	
 	
@@ -66,35 +69,46 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 		setPlayer(player);
 
 		
-		Console.log(player.getName()+" wakes up in " + player.getCity().getCityName(), Console.standartOutput);
-		Console.log("Type help for available commands" , Console.standartOutput);
+		Console.log(player.getName()+" wakes up in " + player.getCity().getCityName(), Console.standardOutput);
+		Console.log("Type help for available commands" , Console.standardOutput);
 		
 	}
 	
 	
 	
 	private void createWorld() {
-		City city = new City("Tamariel");
 		
+		commands.add(new Command("help", "command", "Shows all the commands in this place"));
+		commands.add(new Command("map", "", "Shows the surrounding cities", "You can go to these cities by typing 'goto'"));
+		commands.add(new Command("goto", "cityname", "Go to the chosen city","To see the available cities type 'lookaround'."));
+		commands.add(new Command("status", "Your life situation"));
+		commands.add(new Command("inventory", "Your inventory"));
+		commands.add(new Command("time", "The current time"));
+		commands.add(new Command("interact", "place", "Interact with a place in this city"));
+		commands.add(new Command("work", "hours","Work as a stable boy for 100 gold per hour"));
+		commands.add(new Command("save", "", "Saves the game"));
+		commands.add(new Command("rite", "amount of health", "Sacrifice your health to gain gold from SATAN himself","To see your life enter 'status'."));
+		// TODO: Lookaround.. and stuff
+		
+		City city=new City("Tamariel");
 		Market m = new Market(this);
 		m.getItems().add(new Item("Sword",0,50));
+		m.getHumans().add(new Bandit(100, "Hungry Tom", city, "", m));
 		city.getPlaces().add(m);
 		cities.add(city);
+		
 		city = new City("Bananistan");
-		cities.add(city);
-		city= new City("Eschenbach");
-		cities.add(city);
-		city=new City("Schmerikon");
-		cities.add(city);
-		city=new City("Ass");
+		m = new Market(this);
+		m.getItems().add(new Item("banana",0,10));
+		city.getPlaces().add(m);
 		cities.add(city);
 		
-
-		
+		city = new City("Eschenbach");
 		Whorehouse h= new Whorehouse(this);
 		Whore h1= new Whore(100, "Anna", city, "", h);
 		h.getHumans().add(h1);
 		city.getPlaces().add(h);
+		cities.add(city);
 		
 	}
 
@@ -108,7 +122,13 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 				
 					break;
 			case "help":
-				Console.log("Available commands: \n map -> Shows cities "
+				if(s.length>1){ // Input of the form: help goto
+					Command.printHelp(s[1],commands);
+				}else{ // help
+					Command.printHelp(commands);
+				}
+				
+				/*Console.log("Available commands: \n map -> Shows cities "
 						+ "\n goto <cityname> -> You go to the chosen city"
 						+ "\n status -> Tells you how many lifes you have left"
 						+ "\n inventory -> Shows you your inventory"
@@ -116,40 +136,25 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 						+ "\n interact <place> -> Interact with a place in this city"
 						+ "\n work <hours> -> Work to get 100 gold per hour"
 						+ "\n save -> Saves the game"
-						+ "\n rite <amount of health> -> Sacrifice a bit of your health to gain gold from SATAN!", Console.standartOutput);
+						+ "\n rite <amount of health> -> Sacrifice a bit of your health to gain gold from SATAN!", Console.standardOutput);
+				*/
 					break;
 			case "goto":
 				if(s.length>1){
-				boolean notFound=true;
-				int i=cities.size()-1;
-				City c;
-				while(notFound){
-					c=(City) cities.get(i);
-					if(c.getCityName().toLowerCase().equals(s[1].toLowerCase())){
-						notFound=false;
+					for(City city : cities){
+						if(city.getCityName().toLowerCase().equals(s[1].toLowerCase())){
+							player.setCity(city);
+							Console.log("You went to: " + city.getCityName(), Console.standardEvent);
 						}
-						--i;
-						if(!notFound){
-							player.setCity(c);
-							Console.log("You went to: " + c.getCityName(), Console.standartEvent);
-						}else if(i<0){
-							break;
-						}
-					
-
+					}
 				}
-				if(notFound){
-					
-					Console.log("Couldn't find you city", Console.errorOutput);
-				}
-				}
-					break;
+				break;
 			case "map":
-				Console.log("Cities here:", Console.standartOutput);
+				Console.log("Cities here:", Console.standardOutput);
 				City city;
 				for(int in=0; in<cities.size();in++){
 					city= (City)cities.get(in);
-					Console.logSingleLine(" "+city.getCityName()+",",Console.standartListOutput);
+					Console.logSingleLine(" "+city.getCityName()+",",Console.standardListOutput);
 				}
 					break;
 			case "mine":
@@ -158,8 +163,8 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 					break;
 			
 			case "status":
-				Console.log("Your name is " +player.getName()+" the "+ player.getGameClass(),Console.standartOutput);
-				Console.log("Health: ", Console.standartOutput);
+				Console.log("Your name is " +player.getName()+" the "+ player.getGameClass(),Console.standardOutput);
+				Console.log("Health: ", Console.standardOutput);
 				int h1= (int)(player.getHealth()/player.getMaxHealth()*10);
 				
 				for(int i1=0;i1<10;i1++){
@@ -170,27 +175,25 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 					}else{
 						Console.logSingleLine("X");
 					}
-					
-					
 				}
 				
-				Console.logSingleLine(" --> "+Float.toString(player.getHealth())+"% life left", Console.standartOutput);
+				Console.logSingleLine(" --> "+Float.toString(player.getHealth())+"% life left", Console.standardOutput);
 				
-				Console.log("You are in the great "+ player.getCity().getCityName()+" at the moment", Console.standartOutput);
-					break;
+				Console.log("You are in the great "+ player.getCity().getCityName()+" at the moment", Console.standardOutput);
+				break;
 			case "inventory":
-				Console.log("In your Inventory is: ", Console.standartOutput);
+				Console.log("In your Inventory is: ", Console.standardOutput);
 
 					if(player.getInventory().size()>0){
 						for(Item mm : player.getInventory()){
 						if(mm.getQuantity()==0){
 							player.getInventory().remove(mm);
 						}else{
-						Console.log("->"+Integer.toString(mm.getQuantity())+"x "+mm.getName(), Console.standartListOutput);
+						Console.log("->"+Integer.toString(mm.getQuantity())+"x "+mm.getName(), Console.standardListOutput);
 						}
 						}
 					}else{
-						Console.log("-->nothing<-- (poor as fuck...)", Console.standartListOutput);
+						Console.log("-->nothing<-- (poor as fuck...)", Console.standardListOutput);
 					}
 				
 					break;
@@ -201,14 +204,14 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 					int monthTime=(int)(((time/60)/24)/30)%12;
 					long yearTime=(long)(((time/60)/24)/30)/12;
 					
-					Console.log("It is: ",Console.standartOutput);
-					if(hourTime/10==0){Console.logSingleLine(Integer.toString(0),Console.standartListOutput);}
-					Console.logSingleLine(hourTime+":",Console.standartListOutput);
-					if(minTime/10==0){Console.logSingleLine(Integer.toString(0),Console.standartListOutput);}
-					Console.logSingleLine(minTime+ " - ",Console.standartListOutput);
-					Console.logSingleLine("On the ",Console.standartOutput);Console.logSingleLine(Integer.toString(dayTime+1),Console.standartListOutput);Console.logSingleLine("th day ",Console.standartOutput);
-					Console.logSingleLine("on the ",Console.standartOutput);Console.logSingleLine(Integer.toString(monthTime+1),Console.standartListOutput);Console.logSingleLine("th month ",Console.standartOutput);
-					Console.logSingleLine("in the ",Console.standartOutput);Console.logSingleLine(Integer.toString((int)yearTime+1),Console.standartListOutput);Console.logSingleLine("th year ",Console.standartOutput);
+					Console.log("It is: ",Console.standardOutput);
+					if(hourTime/10==0){Console.logSingleLine(Integer.toString(0),Console.standardListOutput);}
+					Console.logSingleLine(hourTime+":",Console.standardListOutput);
+					if(minTime/10==0){Console.logSingleLine(Integer.toString(0),Console.standardListOutput);}
+					Console.logSingleLine(minTime+ " - ",Console.standardListOutput);
+					Console.logSingleLine("On the ",Console.standardOutput);Console.logSingleLine(Integer.toString(dayTime+1),Console.standardListOutput);Console.logSingleLine("th day ",Console.standardOutput);
+					Console.logSingleLine("on the ",Console.standardOutput);Console.logSingleLine(Integer.toString(monthTime+1),Console.standardListOutput);Console.logSingleLine("th month ",Console.standardOutput);
+					Console.logSingleLine("in the ",Console.standardOutput);Console.logSingleLine(Integer.toString((int)yearTime+1),Console.standardListOutput);Console.logSingleLine("th year ",Console.standardOutput);
 					
 					
 					break;
@@ -232,7 +235,7 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 			        ex.printStackTrace();
 			    }
 			    
-			    Console.log("Game saved",Console.standartEvent);;
+			    Console.log("Game saved",Console.standardEvent);;
 			    break;
 			    
 			case "interact":
@@ -308,7 +311,7 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 	
 	public void loadedGame() {
 		Console.clearlog();
-		Console.logSingleLine("Loaded", Console.standartEvent);
+		Console.logSingleLine("Loaded", Console.standardEvent);
 		Console.log("Welcome back, "+player.getName()+" the " + player.getGameClass(), Console.startOutput);
 		Console.log("You are in " +player.getCity().getCityName(), Console.startOutput);
 		

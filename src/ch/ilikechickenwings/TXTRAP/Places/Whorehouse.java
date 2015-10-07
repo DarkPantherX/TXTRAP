@@ -33,7 +33,7 @@ public class Whorehouse extends Place{
 			for(Human h: getHumans()){
 				if(s[1].toLowerCase().equals(h.getName().toLowerCase())&&h instanceof Whore){
 					Whore w = (Whore)h;
-					Console.log("You fucked " +h.getName(),Console.standartEvent);
+					Console.log("You fucked " +h.getName(),Console.standardEvent);
 					w.setTimesHadSex(w.getTimesHadSex()+1);
 					
 				}else{
@@ -45,10 +45,10 @@ public class Whorehouse extends Place{
 			
 			break;
 		case "showgirls":
-			Console.log("There are following whores available: ",Console.standartOutput);
+			Console.log("There are following whores available: ",Console.standardOutput);
 			for(Human h : getHumans()){
 				if(h instanceof Whore){
-					Console.logSingleLine(h.getName()+" ",Console.standartListOutput);
+					Console.logSingleLine(h.getName()+" ",Console.standardListOutput);
 					
 				}
 				
@@ -68,7 +68,7 @@ public class Whorehouse extends Place{
 			stopInteract(null);
 			getWorldFrame().getPlayer().setPlace(null);
 			Console.clearlog();
-			Console.logSingleLine("You left the whorehouse",Console.standartEvent);
+			Console.logSingleLine("You left the whorehouse",Console.standardEvent);
 			break;
 		default:
 			Console.log("Command not found",Console.errorOutput);
