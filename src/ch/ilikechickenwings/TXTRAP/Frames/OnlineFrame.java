@@ -26,6 +26,8 @@ public class OnlineFrame implements Processable, Runnable{
 	Input ir;
 	volatile Thread il;
 
+	private volatile boolean isRunning = true;
+
 
 	
 	private ArrayList<NetInput> ins = new ArrayList<NetInput>();
@@ -120,6 +122,7 @@ public class OnlineFrame implements Processable, Runnable{
 				oos.writeObject(netInput);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
+				close();
 				e.printStackTrace();
 			}
 		} else {
@@ -142,8 +145,10 @@ public class OnlineFrame implements Processable, Runnable{
 		try {
 				ir.kill();
 				connected=false;
-				
+				isRunning=false;
 				socket.close();
+				mainFrame.setProcessable(mainFrame);
+				Console.log("Connection closed, returning to main screen, type 'new' for a new local game, 'load <savename>' or 'online' for the online mode",Console.startOutput);
 				
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
@@ -181,7 +186,6 @@ public class OnlineFrame implements Processable, Runnable{
 
 class Input implements Runnable {
 		
-		private volatile boolean isRunning = true;
 		@Override
 		public void run() {
 			
@@ -190,6 +194,7 @@ class Input implements Runnable {
 					if (ois != null) {
 						if(connected){
 						NetInput net = (NetInput) ois.readObject();
+						if(!net.getTxt().toLowerCase().equals("y!-!quit!-!y")){
 						if(net.isClearTxt()){
 							Console.clearlog();
 							Console.logSingleLine(net.getTxt(), net.getStyle());
@@ -199,9 +204,11 @@ class Input implements Runnable {
 							Console.log(net.getTxt(), net.getStyle());
 							
 						}
+						}else{
+							close();
 						}
 						
-
+						}
 						
 						}
 					Thread.sleep(50L);
@@ -211,12 +218,15 @@ class Input implements Runnable {
 
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
+					close();
 					e.printStackTrace();
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
+					close();
 					e.printStackTrace();
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
+					close();
 					e.printStackTrace();
 				} 
 
