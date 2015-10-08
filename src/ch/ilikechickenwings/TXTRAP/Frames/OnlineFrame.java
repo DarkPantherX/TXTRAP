@@ -41,14 +41,19 @@ public class OnlineFrame implements Processable, Runnable{
 	public void getOnline() {
 		
 			try {
+				Console.log("Connecting...");
 				socket = new Socket(ip, port);
 				connected=true;
+				new Thread(this).start();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
+				Console.log("No connection possbile! ", Console.errorOutput);
+				Console.log("type 'return' to return to the main menu, you didn't connect");
+				close();
 				e.printStackTrace();
 			}
 			
-			new Thread(this).start();
+			
 
 		
 		}
@@ -69,7 +74,7 @@ public class OnlineFrame implements Processable, Runnable{
 				mainFrame.setProcessable(mainFrame);
 				Console.log("Available Commands: online/new game/load <gamename>");
 			}else{
-				Console.log("type 'return' to return to the main menu, are didnt connecnt");
+				Console.log("type 'return' to return to the main menu, you didn't connect");
 			}
 			
 		}
@@ -188,6 +193,12 @@ class Input implements Runnable {
 		
 		@Override
 		public void run() {
+			
+			 Runtime.getRuntime().addShutdownHook(new Thread() {
+			      public void run() {
+			        ins.add(new NetInput("offline"));
+			      }
+			    });
 			
 			while (isRunning) {
 				try {

@@ -101,7 +101,7 @@ public class MainFrame implements ActionListener, Processable , Serializable{
 		processable=this;
 		
 		Console.logSingleLine("Welcome in "+gameName+" a hard place for all kinds of folks!", Console.startOutput);
-		Console.log("Do you want to 'load' into a game or do you want a new game with 'new game'? ",Console.startOutput);
+		Console.log("Do you want to 'load' into a game, do you want a new game with 'new game' or do you want to play online with 'online'? ",Console.startOutput);
 		
 	}
 	
