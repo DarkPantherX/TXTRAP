@@ -4,15 +4,19 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 
 import ch.ilikechickenwings.TXTRAP.Console;
 import ch.ilikechickenwings.TXTRAP.Frames.NewWorldFrame;
@@ -48,6 +52,10 @@ public class MainFrame implements ActionListener, Processable , Serializable{
 	private TTextPane tArea;
 	
 	
+	private ArrayList<String> strs = new ArrayList<String>();
+	private int commandLine=0;
+	
+	
 	/**
 	 * Main Class, with this class starts the frame and engine
 	 */
@@ -71,6 +79,41 @@ public class MainFrame implements ActionListener, Processable , Serializable{
 
 		tField = new JTextField();
 		tField.addActionListener(this);
+		
+        tField.getActionMap().put("KeyUP",  new AbstractAction() {
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+              if(commandLine>0){
+				--commandLine;
+				tField.setText(((String)strs.get(commandLine)));
+              }
+				
+            }
+        });
+        tField.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "KeyUP");
+		
+        tField.getActionMap().put("KeyDOWN",  new AbstractAction() {
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+              if(commandLine<strs.size()-1&&!strs.isEmpty()){
+				++commandLine;
+				tField.setText(((String) strs.get(commandLine)));
+              }else{
+            	  tField.setText("");  
+              }
+				
+            }
+        });
+        tField.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "KeyDOWN");
+		
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -172,7 +215,9 @@ public class MainFrame implements ActionListener, Processable , Serializable{
 		if (e.getSource().equals(but) || e.getSource().equals(tField)) {
 
 			if (!tField.getText().trim().equals("")) {
-
+				strs.remove(tField.getText());
+				strs.add(tField.getText());
+				commandLine=strs.size();
 				Console.log(tField.getText(),Console.standardCommand);
 				tArea.setCaretPosition(tArea.getDocument().getLength());
 				String s[]=tField.getText().split(" ");

@@ -19,8 +19,13 @@ public class LoginFrame implements Processable{
 		oF.port=Integer.parseInt(s1[1]);
 		oF.getOnline();
 		oF.getMainFrame().setProcessable(oF);
+		}else if(s[0].toLowerCase().contains("return")){
+			
+		oF.getMainFrame().setProcessable(oF.getMainFrame());
+		Console.log("Choose 'new', 'load <savename>' or 'online'",Console.startOutput);
+		
 		}else{
-			Console.log("This is not the correct way to connect! type: '<IP-Adress>:<Serverport>'");
+			Console.log("This is not the correct way to connect! type: '<IP-Adress>:<Serverport>' or go back with return!");
 			
 		}
 	}

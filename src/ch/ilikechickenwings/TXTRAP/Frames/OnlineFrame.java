@@ -49,7 +49,6 @@ public class OnlineFrame implements Processable, Runnable{
 				// TODO Auto-generated catch block
 				Console.log("No connection possbile! ", Console.errorOutput);
 				Console.log("type 'return' to return to the main menu, you didn't connect");
-				close();
 				e.printStackTrace();
 			}
 			
