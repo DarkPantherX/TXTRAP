@@ -280,7 +280,7 @@ public class WorldFrame implements Processable, Runnable, Serializable{
 					for(Item ite : player.getInventory()){
 						if(ite.getName().toLowerCase().equals("gold")){
 							ite.setQuantity(ite.getQuantity()+100*a);
-							Console.log("You sacrificed "+a*10+"% of your health to gain "+a*100+" gold.");
+							Console.log("You sacrificed "+1000*a/player.getMaxHealth()+"% of your health to gain "+a*100+" gold.");
 							done=true;
 							break;
 						}

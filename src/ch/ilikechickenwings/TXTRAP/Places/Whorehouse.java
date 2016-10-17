@@ -27,7 +27,8 @@ public class Whorehouse extends Place{
 		case "help":
 			Console.log("Available commands:"
 					+"\n fuck <name of whore> -> shows the items to sell"
-					+"\n showgirls -> shows the name of the girls");
+					+"\n showgirls -> shows the name of the girls"
+			        +"\n leave -> return to the city");
 			break;
 		case "fuck":
 			for(Human h: getHumans()){
